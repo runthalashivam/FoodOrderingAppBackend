@@ -100,6 +100,27 @@ public class CustomerBusinessService {
         return customerAuthTokenEntity;
     }
 
+    @Transactional
+    public CustomerEntity updateCustomer(CustomerEntity updatedCustomerEntity, final String authorizationToken)
+            throws AuthorizationFailedException {
+
+        CustomerAuthTokenEntity customerAuthTokenEntity = customerDao.getCustomerAuthToken(authorizationToken);
+        if (customerAuthTokenEntity == null) {
+            throw new AuthorizationFailedException("ATHR-001", "Customer is not Logged in.");
+        } else if (customerAuthTokenEntity.getLogoutAt() != null) {
+            throw new AuthorizationFailedException("ATHR-002",
+                    "Customer is logged out. Log in again to access this endpoint.");
+        } else if (ZonedDateTime.now().isAfter(customerAuthTokenEntity.getExpiresAt())) {
+            throw new AuthorizationFailedException("ATHR-003",
+                    "Your session is expired. Log in again to access this endpoint.");
+        }
+        CustomerEntity customerEntity = customerAuthTokenEntity.getCustomer();
+        customerEntity.setFirstName(updatedCustomerEntity.getFirstName());
+        customerEntity.setLastName(updatedCustomerEntity.getLastName());
+        customerDao.updateCustomer(customerEntity);
+        return customerEntity;
+    }
+
     private boolean isPasswordWeak(String password) {
         return (password.length() < 8
                 || !Pattern.compile("\\p{Nd}").matcher(password).find()
