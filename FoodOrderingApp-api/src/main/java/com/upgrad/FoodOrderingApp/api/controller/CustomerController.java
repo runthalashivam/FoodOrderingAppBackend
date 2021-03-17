@@ -1,12 +1,14 @@
 package com.upgrad.FoodOrderingApp.api.controller;
 
 import com.upgrad.FoodOrderingApp.api.model.LoginResponse;
+import com.upgrad.FoodOrderingApp.api.model.LogoutResponse;
 import com.upgrad.FoodOrderingApp.api.model.SignupCustomerRequest;
 import com.upgrad.FoodOrderingApp.api.model.SignupCustomerResponse;
 import com.upgrad.FoodOrderingApp.service.businness.CustomerBusinessService;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerAuthTokenEntity;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
 import com.upgrad.FoodOrderingApp.service.exception.AuthenticationFailedException;
+import com.upgrad.FoodOrderingApp.service.exception.AuthorizationFailedException;
 import com.upgrad.FoodOrderingApp.service.exception.SignUpRestrictedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -71,6 +73,18 @@ public class CustomerController {
         headers.add("access-token", customerAuthToken.getAccessToken());
         headers.add("access-control-expose-headers", "access-token");
         return new ResponseEntity<LoginResponse>(successfulLoginResponse, headers, HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path = "/customer/logout",
+            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<LogoutResponse> logout(@RequestHeader("authorization") final String authorization) throws AuthorizationFailedException {
+        String[] bearerToken = authorization.split("Bearer ");
+        final CustomerAuthTokenEntity customerAuthTokenEntity = customerBusinessService.logout(bearerToken[1]);
+        CustomerEntity customerEntity = customerAuthTokenEntity.getCustomer();
+        LogoutResponse logoutResponse = new LogoutResponse()
+                .id(customerEntity.getUuid())
+                .message("LOGGED OUT SUCCESSFULLY");
+        return new ResponseEntity<LogoutResponse>(logoutResponse, HttpStatus.OK);
     }
 
 }

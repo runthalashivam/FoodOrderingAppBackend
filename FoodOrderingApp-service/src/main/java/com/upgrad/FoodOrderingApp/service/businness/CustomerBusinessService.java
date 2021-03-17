@@ -4,6 +4,7 @@ import com.upgrad.FoodOrderingApp.service.dao.CustomerDao;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerAuthTokenEntity;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
 import com.upgrad.FoodOrderingApp.service.exception.AuthenticationFailedException;
+import com.upgrad.FoodOrderingApp.service.exception.AuthorizationFailedException;
 import com.upgrad.FoodOrderingApp.service.exception.SignUpRestrictedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -76,6 +77,27 @@ public class CustomerBusinessService {
         } else {
             throw new AuthenticationFailedException("ATH-002", "Invalid Credentials");
         }
+    }
+
+    @org.springframework.transaction.annotation.Transactional
+    public CustomerAuthTokenEntity logout(final String authorizationToken) throws AuthorizationFailedException {
+        CustomerAuthTokenEntity customerAuthTokenEntity = customerDao.getCustomerAuthToken(authorizationToken);
+
+        if (customerAuthTokenEntity == null) {
+            throw new AuthorizationFailedException("ATHR-001", "Customer is not Logged in.");
+        } else if (customerAuthTokenEntity.getLogoutAt() != null) {
+            throw new AuthorizationFailedException("ATHR-002",
+                    "Customer is logged out. Log in again to access this endpoint.");
+        }
+
+        final ZonedDateTime now = ZonedDateTime.now();
+        if (now.isAfter(customerAuthTokenEntity.getExpiresAt())) {
+            throw new AuthorizationFailedException("ATHR-003",
+                    "Your session is expired. Log in again to access this endpoint.");
+        }
+        customerAuthTokenEntity.setLogoutAt(now);
+        customerDao.updateCustomerAuth(customerAuthTokenEntity);
+        return customerAuthTokenEntity;
     }
 
     private boolean isPasswordWeak(String password) {
