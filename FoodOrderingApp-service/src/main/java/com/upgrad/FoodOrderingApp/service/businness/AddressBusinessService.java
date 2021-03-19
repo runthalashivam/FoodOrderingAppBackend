@@ -85,6 +85,7 @@ public class AddressBusinessService {
 
         //Validate customer
         CustomerAuthEntity customerAuthTokenEntity = customerDao.getCustomerAuthToken(authorizationToken);
+        CustomerAuthEntity customerAuthTokenEntity = customerDao.getCustomerAuthToken(authorizationToken);
         if (customerAuthTokenEntity==null) {
             throw new AuthorizationFailedException("ATHR-001", "Customer is not Logged in.");
         } else if (customerAuthTokenEntity.getLogoutAt() != null) {
@@ -92,6 +93,7 @@ public class AddressBusinessService {
         } else if (customerAuthTokenEntity.getExpiresAt().compareTo(ZonedDateTime.now()) < 0) {
             throw new AuthorizationFailedException("ATHR-003", "Your session is expired. Log in again to access this endpoint.");
         }
+        return addressDao.createAddress(addressEntity);
 
         //Check if address id field is empty
         if(addressId == null) {
