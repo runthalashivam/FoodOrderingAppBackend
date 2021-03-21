@@ -37,6 +37,6 @@ public class RestExceptionHandler {
     @ExceptionHandler(AuthorizationFailedException.class)
     public ResponseEntity<ErrorResponse> AuthorizationFailedException(AuthorizationFailedException exc, WebRequest request) {
         return new ResponseEntity<ErrorResponse>(new ErrorResponse().code(exc.getCode())
-                .message(exc.getErrorMessage()), HttpStatus.FORBIDDEN);
+                .message(exc.getErrorMessage()), HttpStatus.UNAUTHORIZED);
     }
 }
