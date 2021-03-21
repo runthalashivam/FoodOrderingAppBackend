@@ -1,7 +1,6 @@
 package com.upgrad.FoodOrderingApp.api.controller;
 
-import com.upgrad.FoodOrderingApp.api.model.SaveAddressRequest;
-import com.upgrad.FoodOrderingApp.api.model.SaveAddressResponse;
+import com.upgrad.FoodOrderingApp.api.model.*;
 import com.upgrad.FoodOrderingApp.service.businness.AddressBusinessService;
 import com.upgrad.FoodOrderingApp.service.dao.AddressDao;
 import com.upgrad.FoodOrderingApp.service.entity.AddressEntity;
@@ -9,6 +8,7 @@ import com.upgrad.FoodOrderingApp.service.entity.StateEntity;
 import com.upgrad.FoodOrderingApp.service.exception.AddressNotFoundException;
 import com.upgrad.FoodOrderingApp.service.exception.AuthorizationFailedException;
 import com.upgrad.FoodOrderingApp.service.exception.SaveAddressException;
+import org.apache.tomcat.jni.Address;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -50,6 +52,36 @@ public class AddressController {
                 .status("ADDRESS SUCCESSFULLY SAVED");
 
         return new ResponseEntity<SaveAddressResponse>(saveAddressResponse, HttpStatus.CREATED);
+    }
+
+
+    @RequestMapping(method = RequestMethod.GET, path = "/address/customer", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<AddressListResponse> getAllPermanentAddresses(@RequestHeader("authorization") final String authorization) throws AuthorizationFailedException {
+
+        String[] bearerToken = authorization.split("Bearer ");
+
+        List<AddressEntity> addressEntities = addressBusinessService.getAllAddressesByCustomer(bearerToken[1]);
+
+        List<AddressList> addresses = new ArrayList<AddressList>();
+
+        //Populate the new list with the list of addresses returned by the addressBusinessService class
+        if(addressEntities != null) {
+            for (AddressEntity addressEntity : addressEntities) {
+                AddressList addressListObject = new AddressList().id(UUID.fromString(addressEntity.getUuid()))
+                        .flatBuildingName(addressEntity.getFlatBuilNumber())
+                        .locality(addressEntity.getLocality())
+                        .city(addressEntity.getCity())
+                        .pincode(addressEntity.getPincode())
+                        .state(new AddressListState().id(UUID.fromString(addressEntity.getState().getUuid()))
+                                .stateName(addressEntity.getState().getStateName()));
+                addresses.add(addressListObject);
+            }
+        }
+
+        //Attach the list to the AddressListResponse before returning it in the ResponseEntity
+        AddressListResponse addressListResponse = new AddressListResponse().addresses(addresses);
+
+        return new ResponseEntity<AddressListResponse>(addressListResponse, HttpStatus.OK);
     }
 
 }
