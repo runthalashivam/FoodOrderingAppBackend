@@ -8,6 +8,7 @@ import com.upgrad.FoodOrderingApp.service.entity.StateEntity;
 import com.upgrad.FoodOrderingApp.service.exception.AddressNotFoundException;
 import com.upgrad.FoodOrderingApp.service.exception.AuthorizationFailedException;
 import com.upgrad.FoodOrderingApp.service.exception.SaveAddressException;
+import org.apache.tomcat.jni.Address;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -51,7 +52,6 @@ public class AddressController {
     }
 
 
-    //Method to get all the saved addresses of a particular customer
     @RequestMapping(method = RequestMethod.GET, path = "/address/customer", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<AddressListResponse> getAllPermanentAddresses(@RequestHeader("authorization") final String authorization) throws AuthorizationFailedException {
 
