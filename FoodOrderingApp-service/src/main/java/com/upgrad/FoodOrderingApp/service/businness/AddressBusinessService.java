@@ -83,5 +83,39 @@ public class AddressBusinessService {
         return customerAddresses;
     }
 
+    @Transactional
+    public boolean deleteAddress(final String addressId, final String authorizationToken) throws AuthorizationFailedException, AddressNotFoundException {
+
+        //Validate customer
+        CustomerAuthTokenEntity customerAuthTokenEntity = customerDao.getCustomerAuthToken(authorizationToken);
+        if (customerAuthTokenEntity==null) {
+            throw new AuthorizationFailedException("ATHR-001", "Customer is not Logged in.");
+        } else if (customerAuthTokenEntity.getLogoutAt() != null) {
+            throw new AuthorizationFailedException("ATHR-002", "Customer is logged out. Log in again to access this endpoint.");
+        } else if (customerAuthTokenEntity.getExpiresAt().compareTo(ZonedDateTime.now()) < 0) {
+            throw new AuthorizationFailedException("ATHR-003", "Your session is expired. Log in again to access this endpoint.");
+        }
+
+        //Check if address id field is empty
+        if(addressId == null) {
+            throw new AddressNotFoundException("ANF-005", "Address id can not be empty");
+        }
+
+        //Check if address to be deleted exists in the database
+        AddressEntity addressToBeDeleted = addressDao.getAddressByUuid(addressId);
+        if(addressToBeDeleted == null) {
+            throw new AddressNotFoundException("ANF-003", "No address by this id");
+        }
+
+        //Check if customer is authorized to delete the address
+        CustomerEntity addressOwner = addressDao.getCustomerByAddress(addressToBeDeleted);
+        CustomerEntity loggedInCustomer = customerAuthTokenEntity.getCustomer();
+        if(addressOwner.getId() != loggedInCustomer.getId()) {
+            throw new AuthorizationFailedException("ATHR-004", "You are not authorized to view/update/delete any one else's address");
+        }
+
+        return addressDao.deleteAddress(addressToBeDeleted);
+    }
+
 
 }
