@@ -94,5 +94,16 @@ public class AddressController {
         return new ResponseEntity<DeleteAddressResponse>(deleteAddressResponse, HttpStatus.OK);
     }
 
+    //Method to get all states
+    @RequestMapping(method = RequestMethod.GET, path = "/states", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<StatesListResponse> getAllStates() {
+        List<StateEntity> states = addressBusinessService.getAllStates();
+        List<StatesList> statesLists = new ArrayList<>();
+        for(StateEntity state : states) {
+            statesLists.add(new StatesList().id(UUID.fromString(state.getUuid())).stateName(state.getStateName()));
+        }
+        StatesListResponse statesListResponse = new StatesListResponse().states(statesLists);
+        return new ResponseEntity<StatesListResponse>(statesListResponse, HttpStatus.OK);
+    }
 
 }
