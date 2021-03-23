@@ -38,6 +38,10 @@ public class AddressDao {
         }
     }
 
+    public List<StateEntity> getAllStates() {
+        return entityManager.createNamedQuery("getAllStates", StateEntity.class).getResultList();
+    }
+
     //Method to get a list of customer address entities specific to a certain customer from the database
     public List<AddressEntity> getAllAddressesByCustomer(final CustomerEntity customer) {
         try {
