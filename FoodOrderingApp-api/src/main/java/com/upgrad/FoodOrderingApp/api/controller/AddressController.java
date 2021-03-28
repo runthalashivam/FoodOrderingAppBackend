@@ -82,7 +82,7 @@ public class AddressController {
     }
 
     //Method to delete an address of a customer
-    @RequestMapping(method = RequestMethod.DELETE, path = "/address/delete/{addressId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(method = RequestMethod.DELETE, path = "/address/{addressId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<DeleteAddressResponse> deleteAddress(@PathVariable String addressId, @RequestHeader("authorization") String authorization) throws AuthorizationFailedException, AddressNotFoundException {
         String[] bearerToken = authorization.split("Bearer ");
         addressBusinessService.deleteAddress(addressId, bearerToken[1]);

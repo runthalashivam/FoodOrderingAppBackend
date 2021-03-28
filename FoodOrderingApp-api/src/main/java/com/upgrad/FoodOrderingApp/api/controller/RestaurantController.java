@@ -104,7 +104,7 @@ public class RestaurantController {
 
     @RequestMapping(
             method = RequestMethod.GET,
-            path = ("/restaurant/{restaurant_id}"),
+            path = ("/api/restaurant/{restaurant_id}"),
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<RestaurantDetailsResponse> getRestaurantById(
             @PathVariable("restaurant_id") final String restaurantUuid)
@@ -120,7 +120,7 @@ public class RestaurantController {
 
     @RequestMapping(
             method = RequestMethod.PUT,
-            path = ("/restaurant/{restaurant_id}"),
+            path = ("/api/restaurant/{restaurant_id}"),
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<RestaurantUpdatedResponse> updateRestaurantRating(

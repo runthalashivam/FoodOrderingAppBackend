@@ -8,9 +8,20 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
+@NamedQueries({
+        @NamedQuery(
+                name = "allOrdersByAddress",
+                query = "select o from OrderEntity o where o.address=:address"),
+        @NamedQuery(
+                name = "getOrdersByCustomer",
+                query =
+                        "select o from OrderEntity o where o.customer.uuid=:customerUUID order by o.date desc")
+})
 public class OrderEntity {
 
     @Id
@@ -58,6 +69,9 @@ public class OrderEntity {
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
     private RestaurantEntity restaurant;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<OrderItemEntity> orderItems = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -137,6 +151,14 @@ public class OrderEntity {
 
     public void setRestaurant(RestaurantEntity restaurant) {
         this.restaurant = restaurant;
+    }
+
+    public List<OrderItemEntity> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItemEntity> orderItems) {
+        this.orderItems = orderItems;
     }
 
     @Override

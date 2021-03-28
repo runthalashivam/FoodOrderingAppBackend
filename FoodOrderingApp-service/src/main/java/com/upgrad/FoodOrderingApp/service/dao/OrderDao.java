@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import java.util.Collections;
+import java.util.List;
 
 @Repository
 public class OrderDao {
@@ -32,4 +34,17 @@ public class OrderDao {
             return null;
         }
     }
+
+    public List<OrderEntity> getOrdersByCustomers(String customerUUID) {
+        List<OrderEntity> ordersByCustomer =
+                entityManager
+                        .createNamedQuery("getOrdersByCustomer", OrderEntity.class)
+                        .setParameter("customerUUID", customerUUID)
+                        .getResultList();
+        if (ordersByCustomer != null) {
+            return ordersByCustomer;
+        }
+        return Collections.emptyList();
+    }
+
 }
