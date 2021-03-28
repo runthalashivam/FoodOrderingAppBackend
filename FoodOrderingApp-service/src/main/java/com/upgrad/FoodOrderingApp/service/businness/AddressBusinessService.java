@@ -28,7 +28,7 @@ public class AddressBusinessService {
     public AddressEntity saveAddress(AddressEntity addressEntity, final String authorizationToken) throws AddressNotFoundException, SaveAddressException, AuthorizationFailedException {
 
         //Validate customer
-        CustomerAuthTokenEntity customerAuthTokenEntity = customerDao.getCustomerAuthToken(authorizationToken);
+        CustomerAuthEntity customerAuthTokenEntity = customerDao.getCustomerAuthToken(authorizationToken);
         if (customerAuthTokenEntity==null) {
             throw new AuthorizationFailedException("ATHR-001", "Customer is not Logged in.");
         } else if (customerAuthTokenEntity.getLogoutAt() != null) {
@@ -65,7 +65,7 @@ public class AddressBusinessService {
     public List<AddressEntity> getAllAddressesByCustomer(final String authorizationToken) throws AuthorizationFailedException {
 
         //Validate customer
-        CustomerAuthTokenEntity customerAuthTokenEntity = customerDao.getCustomerAuthToken(authorizationToken);
+        CustomerAuthEntity customerAuthTokenEntity = customerDao.getCustomerAuthToken(authorizationToken);
         if (customerAuthTokenEntity==null) {
             throw new AuthorizationFailedException("ATHR-001", "Customer is not Logged in.");
         } else if (customerAuthTokenEntity.getLogoutAt() != null) {
@@ -84,7 +84,7 @@ public class AddressBusinessService {
     public boolean deleteAddress(final String addressId, final String authorizationToken) throws AuthorizationFailedException, AddressNotFoundException {
 
         //Validate customer
-        CustomerAuthTokenEntity customerAuthTokenEntity = customerDao.getCustomerAuthToken(authorizationToken);
+        CustomerAuthEntity customerAuthTokenEntity = customerDao.getCustomerAuthToken(authorizationToken);
         if (customerAuthTokenEntity==null) {
             throw new AuthorizationFailedException("ATHR-001", "Customer is not Logged in.");
         } else if (customerAuthTokenEntity.getLogoutAt() != null) {
