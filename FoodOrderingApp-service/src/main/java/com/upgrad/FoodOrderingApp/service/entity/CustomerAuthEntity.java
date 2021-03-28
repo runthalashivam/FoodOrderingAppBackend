@@ -16,7 +16,7 @@ import java.time.ZonedDateTime;
 })
 
 
-public class CustomerAuthTokenEntity {
+public class CustomerAuthEntity {
 
     @Id
     @Column(name = "id")
