@@ -1,7 +1,6 @@
 package com.upgrad.FoodOrderingApp.service.entity;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -38,7 +37,7 @@ public class ItemEntity {
     @Column(name = "type")
     @NotNull
     @Size(max = 10)
-    private String itemType;
+    private String type;
 
     public Integer getId() {
         return id;
@@ -72,12 +71,12 @@ public class ItemEntity {
         this.price = price;
     }
 
-    public String getItemType() {
-        return itemType;
+    public String getType() {
+        return type;
     }
 
-    public void setItemType(String itemType) {
-        this.itemType = itemType;
+    public void setType(String itemType) {
+        this.type = itemType;
     }
 
     @Override
