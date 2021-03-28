@@ -1,136 +1,136 @@
 package com.upgrad.FoodOrderingApp.service.entity;
 
-import org.apache.commons.lang3.builder.*;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
+
 @Entity
-@Table(name = "customer")
+@Table(
+        name = "customer"
+)
 @NamedQueries(
-        {
-                @NamedQuery(name = "customerByContactNumber", query = "select c from CustomerEntity c " +
-                        "where c.contactNumber = :contactNumber")
+        {       //return customer record matching with a particular contact number
+                @NamedQuery(name = "customerByContactNumber", query = "select c from CustomerEntity c where c.contactNumber = :contactNumber")
         }
 )
-
-
 public class CustomerEntity implements Serializable {
 
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @Column(name = "uuid")
-    @NotNull
-    @Size(max = 200)
+    @Column(
+            name = "ID"
+    )
+    @GeneratedValue(
+            strategy = GenerationType.IDENTITY
+    )
+    private long id;
+    //uuid must be UNIQUE & NOTNULL
+    @Column(
+            name = "UUID"
+    )
+    @Size(
+            max = 200
+    )
     private String uuid;
 
-    @Column(name = "firstname")
+    @Column(
+            name = "FIRSTNAME"
+    )
     @NotNull
-    @Size(max = 30)
+    @Size(
+            max = 30
+    )
     private String firstName;
 
-    @Column(name = "lastname")
-    @NotNull
-    @Size(max = 30)
+    @Column(
+            name = "LASTNAME"
+    )
+    //lastName can be NULL
+    @Size(
+            max = 30
+    )
     private String lastName;
 
-    @Column(name = "email")
-    @NotNull
-    @Size(max = 50)
-    private String email;
+    //email can be NULL
+    @Column(
+            name = "EMAIL"
+    )
 
-    @Column(name = "contact_number")
-    @Size(max = 30)
+    @Size(
+            max = 50
+    )
+    private String email;
+    //contactNumber must be UNIQUE & NOTNULL
+    @Column(
+            name = "CONTACT_NUMBER"
+    )
+    @Size(
+            max = 30
+    )
+
     private String contactNumber;
 
-    @Column(name = "password")
-    @ToStringExclude
-    @Size(max = 255)
+    @Column(
+            name = "PASSWORD"
+    )
+    @NotNull
     private String password;
 
-    @Column(name = "salt")
+    @Column(
+            name = "SALT"
+    )
     @NotNull
-    @Size(max = 255)
-    @ToStringExclude
+    @Size(
+            max = 200
+    )
     private String salt;
 
-    public Integer getId() {
-        return id;
-    }
+    public long getId() { return id; }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    public void setId(long id) { this.id = id; }
 
-    public String getUuid() {
-        return uuid;
-    }
+    public String getUuid() { return uuid; }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
+    public void setUuid(String uuid) { this.uuid = uuid; }
 
-    public String getFirstName() {
-        return firstName;
-    }
+    public String getFirstName() { return firstName; }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
 
-    public String getLastName() {
-        return lastName;
-    }
+    public String getLastName() { return lastName; }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+    public void setLastName(String lastName) { this.lastName = lastName; }
 
-    public String getEmail() {
-        return email;
-    }
+    public String getEmail() { return email; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public void setEmail(String email) { this.email = email; }
 
-    public String getContactNumber() {
-        return contactNumber;
-    }
+    public String getContactNumber() { return contactNumber; }
 
-    public void setContactNumber(String contactNumber) {
-        this.contactNumber = contactNumber;
-    }
+    public void setContactNumber(String contactNumber) { this.contactNumber = contactNumber; }
 
-    public String getPassword() {
-        return password;
-    }
+    public String getPassword() { return password; }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public void setPassword(String password) { this.password = password; }
 
-    public String getSalt() {
-        return salt;
-    }
+    public String getSalt() { return salt; }
 
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
+    public void setSalt(String salt) { this.salt = salt; }
 
-    @Override
-    public boolean equals(Object obj) {
-        return new EqualsBuilder().append(this, obj).isEquals();
-    }
+    public boolean equals(Object obj) { return (new EqualsBuilder()).append(this, obj).isEquals(); }
 
-    @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(this).hashCode();
+        return (new HashCodeBuilder()).append(this).hashCode();
+    }
+
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
     }
 
 }
