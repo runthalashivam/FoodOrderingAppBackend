@@ -2,6 +2,7 @@ package com.upgrad.FoodOrderingApp.service.businness;
 
 import com.upgrad.FoodOrderingApp.service.dao.AddressDao;
 import com.upgrad.FoodOrderingApp.service.dao.CustomerDao;
+import com.upgrad.FoodOrderingApp.service.dao.PaymentDao;
 import com.upgrad.FoodOrderingApp.service.entity.*;
 import com.upgrad.FoodOrderingApp.service.entity.AddressEntity;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerAddressEntity;
@@ -28,6 +29,9 @@ public class AddressBusinessService {
     @Autowired
     private CustomerDao customerDao;
 
+    @Autowired
+    private PaymentDao paymentDao;
+
     @Transactional
     public AddressEntity saveAddress(AddressEntity addressEntity, final String authorizationToken) throws AddressNotFoundException, SaveAddressException, AuthorizationFailedException {
 
@@ -44,7 +48,7 @@ public class AddressBusinessService {
         //Check requirements for request
 
         //Validate customer
-        CustomerAuthTokenEntity customerAuthTokenEntity = customerDao.getCustomerAuthToken(authorizationToken);
+        CustomerAuthEntity customerAuthTokenEntity = customerDao.getCustomerAuthToken(authorizationToken);
         if (customerAuthTokenEntity==null) {
             throw new AuthorizationFailedException("ATHR-001", "Customer is not Logged in.");
         } else if (customerAuthTokenEntity.getLogoutAt() != null) {
@@ -120,7 +124,7 @@ public class AddressBusinessService {
     public List<AddressEntity> getAllAddressesByCustomer(final String authorizationToken) throws AuthorizationFailedException {
 
         //Validate customer
-        CustomerAuthTokenEntity customerAuthTokenEntity = customerDao.getCustomerAuthToken(authorizationToken);
+        CustomerAuthEntity customerAuthTokenEntity = customerDao.getCustomerAuthToken(authorizationToken);
         if (customerAuthTokenEntity==null) {
             throw new AuthorizationFailedException("ATHR-001", "Customer is not Logged in.");
         } else if (customerAuthTokenEntity.getLogoutAt() != null) {
@@ -147,6 +151,7 @@ public class AddressBusinessService {
         if(addressOwner.getId() != loggedInCustomer.getId()) {
             throw new AuthorizationFailedException("ATHR-004", "You are not authorized to view/update/delete any one else's address");
         }
+
 
         return addressDao.deleteAddress(addressToBeDeleted);
     }
