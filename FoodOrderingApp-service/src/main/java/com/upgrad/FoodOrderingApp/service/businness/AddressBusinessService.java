@@ -2,7 +2,11 @@ package com.upgrad.FoodOrderingApp.service.businness;
 
 import com.upgrad.FoodOrderingApp.service.dao.AddressDao;
 import com.upgrad.FoodOrderingApp.service.dao.CustomerDao;
+import com.upgrad.FoodOrderingApp.service.dao.PaymentDao;
 import com.upgrad.FoodOrderingApp.service.entity.*;
+import com.upgrad.FoodOrderingApp.service.entity.AddressEntity;
+import com.upgrad.FoodOrderingApp.service.entity.CustomerAddressEntity;
+import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
 import com.upgrad.FoodOrderingApp.service.exception.AddressNotFoundException;
 import com.upgrad.FoodOrderingApp.service.exception.AuthorizationFailedException;
 import com.upgrad.FoodOrderingApp.service.exception.SaveAddressException;
@@ -23,6 +27,9 @@ public class AddressBusinessService {
 
     @Autowired
     private CustomerDao customerDao;
+
+    @Autowired
+    private PaymentDao paymentDao;
 
     @Transactional
     public AddressEntity saveAddress(AddressEntity addressEntity, final String authorizationToken) throws AddressNotFoundException, SaveAddressException, AuthorizationFailedException {

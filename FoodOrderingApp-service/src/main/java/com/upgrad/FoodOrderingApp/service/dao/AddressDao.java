@@ -19,7 +19,6 @@ public class AddressDao {
 
 
     public AddressEntity createAddress(AddressEntity addressEntity) {
-
         entityManager.persist(addressEntity);
         return addressEntity;
     }
@@ -89,4 +88,5 @@ public class AddressDao {
         }
         return true;
     }
+
 }
