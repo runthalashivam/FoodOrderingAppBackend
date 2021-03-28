@@ -11,7 +11,9 @@ import javax.validation.constraints.Size;
 @Table(name = "payment")
 @NamedQueries(
         {
-                @NamedQuery(name = "paymentByUuid", query = "select p from PaymentEntity p where p.uuid = :paymentUuid")
+                @NamedQuery(
+                        name = "getPaymentByUUID", query = "select p from PaymentEntity p where p.uuid=:paymentUUID"),
+                @NamedQuery(name = "getAllPaymentMethods", query = "select p from PaymentEntity p")
         }
 )
 public class PaymentEntity {
