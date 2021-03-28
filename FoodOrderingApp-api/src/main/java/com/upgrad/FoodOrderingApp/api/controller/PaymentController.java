@@ -1,7 +1,7 @@
 package com.upgrad.FoodOrderingApp.api.controller;
 
-import com.upgrad.FoodOrderingApp.api.requestmodal.PaymentListResponse;
-import com.upgrad.FoodOrderingApp.api.requestmodal.PaymentResponse;
+import com.upgrad.FoodOrderingApp.api.model.PaymentListResponse;
+import com.upgrad.FoodOrderingApp.api.model.PaymentResponse;
 import com.upgrad.FoodOrderingApp.service.businness.PaymentService;
 import com.upgrad.FoodOrderingApp.service.entity.PaymentEntity;
 import io.swagger.annotations.Api;

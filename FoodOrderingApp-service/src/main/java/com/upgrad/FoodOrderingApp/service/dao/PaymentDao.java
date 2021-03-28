@@ -19,6 +19,11 @@ public class PaymentDao {
     public List<PaymentEntity> getPaymentMethods(){
         try {
             return this.entityManager.createNamedQuery("allPaymentMethods", PaymentEntity.class).getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
     public PaymentEntity getPaymentByUuid(final String paymentUuid) {
         try {
             return entityManager.createNamedQuery("paymentByUuid", PaymentEntity.class)
