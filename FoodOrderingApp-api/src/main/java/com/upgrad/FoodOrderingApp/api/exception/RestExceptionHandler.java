@@ -70,4 +70,16 @@ public class RestExceptionHandler {
                 .message(exc.getErrorMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<ErrorResponse> categoryNotFoundException(CategoryNotFoundException exception,
+                                                                   WebRequest request) {
+        return new ResponseEntity<ErrorResponse>(new ErrorResponse().code(exception.getCode())
+                .message(exception.getErrorMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(InvalidRatingException.class)
+    public ResponseEntity<ErrorResponse> invalidRatingExcpetion(InvalidRatingException exception, WebRequest request) {
+        return new ResponseEntity<ErrorResponse>(new ErrorResponse().code(exception.getCode())
+                .message(exception.getErrorMessage()), HttpStatus.BAD_REQUEST);
+    }
 }

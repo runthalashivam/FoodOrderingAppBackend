@@ -15,7 +15,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -29,9 +28,15 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
                 query = "select c from CategoryEntity c where c.uuid=:uuid order by categoryName"),
         @NamedQuery(
                 name = "getAllCategoriesOrderedByName",
-                query = "select c from CategoryEntity c order by categoryName asc")
+                query = "select c from CategoryEntity c order by categoryName asc"),
+        @NamedQuery(
+                name = "getCategoriesByRestaurant",
+                query =
+                        "Select c from CategoryEntity c where id in (select rc.categoryId from RestaurantCategoryEntity rc where rc.restaurantId = "
+                                + "(select r.id from RestaurantEntity r where "
+                                + " r.uuid=:restaurantUuid) )  order by c.categoryName")
 })
-public class CategoryEntity implements Serializable {
+public class CategoryEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

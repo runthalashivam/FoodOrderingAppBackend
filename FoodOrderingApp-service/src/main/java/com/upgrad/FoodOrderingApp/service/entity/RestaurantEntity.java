@@ -11,7 +11,21 @@ import javax.validation.constraints.Size;
 @Table(name = "restaurant")
 @NamedQueries(
         {
-                @NamedQuery(name = "restaurantByUuid", query = "select r from RestaurantEntity r where r.uuid = :restaurantUuid")
+                @NamedQuery(name = "restaurantByUuid", query = "select r from RestaurantEntity r where r.uuid = :restaurantUuid"),
+                @NamedQuery(
+                name = "restaurantsByRating",
+                query = "select r from RestaurantEntity r order  by customerRating desc"),
+                @NamedQuery(
+                        name = "getRestaurantByName",
+                        query =
+                                "select r from RestaurantEntity r where lower(restaurantName) like lower(:searchString) "
+                                        + "order by r.restaurantName asc"),
+                @NamedQuery(
+                        name = "restaurantByCategory",
+                        query =
+                                "Select r from RestaurantEntity r where id in (select rc.restaurantId from RestaurantCategoryEntity rc where rc.categoryId = "
+                                        + "(select c.id from CategoryEntity c where "
+                                        + "c.uuid=:categoryUuid) ) order by restaurant_name")
         }
 )
 
