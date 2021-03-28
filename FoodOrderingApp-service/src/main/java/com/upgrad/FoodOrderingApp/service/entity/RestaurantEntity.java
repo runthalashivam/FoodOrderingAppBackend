@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.math.BigDecimal;
 
 @Entity
 @Table(name = "restaurant")
@@ -37,9 +36,8 @@ public class RestaurantEntity {
     @Size(max = 255)
     private String photoUrl;
 
-    @NotNull
     @Column(name = "customer_rating")
-    private BigDecimal customerRating;
+    private Double customerRating;
 
     @NotNull
     @Column(name = "average_price_for_two")
@@ -86,11 +84,11 @@ public class RestaurantEntity {
         this.photoUrl = photoUrl;
     }
 
-    public BigDecimal getCustomerRating() {
+    public Double getCustomerRating() {
         return customerRating;
     }
 
-    public void setCustomerRating(BigDecimal customerRating) {
+    public void setCustomerRating(Double customerRating) {
         this.customerRating = customerRating;
     }
 
